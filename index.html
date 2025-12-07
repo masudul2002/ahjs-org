@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign in — Anto Huzrapur Jubo Shongha</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --cyan: #00c5cf; /* bright cyan */
+      --orange: #ff8a00;  /* orange */
+      --bg-dark: #071018;
+      --card: rgba(255,255,255,0.03);
+      --text: #E6F7FA;
+      --muted: #9AA9B6;
+      --glass: rgba(255,255,255,0.04);
+      --radius: 12px;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* box sizing for predictable widths */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: linear-gradient(135deg, rgba(11,198,198,0.06) 0%, rgba(255,138,0,0.04) 50%, rgba(11,198,198,0.03) 100%), var(--bg-dark);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    /* animated gradient blobs in background */
+    .bg-blob {
+      position:fixed;
+      border-radius:50%;
+      filter:blur(60px);
+      opacity:0.45;
+      animation: float 12s ease-in-out infinite alternate;
+      pointer-events:none;
+      mix-blend-mode:screen;
+    }
+    .blob1{width:520px;height:520px;left:-120px;top:-80px;background:radial-gradient(circle,#ff8a00,#ff6a00); animation-duration:14s;}
+    .blob2{width:420px;height:420px;right:-100px;bottom:-60px;background:radial-gradient(circle,#00c5cf,#0096a8); animation-duration:18s; animation-delay:2s;}
+    .blob3{width:300px;height:300px;left:40%;top:10%;background:radial-gradient(circle,#ffd36a,#ff8a00); opacity:0.12; animation-duration:20s; animation-delay:4s;}
+
+    @keyframes float{
+      0% { transform: translateY(0) translateX(0) scale(1); }
+      100% { transform: translateY(-40px) translateX(30px) scale(1.04); }
+    }
+
+    /* subtle animated noise overlay */
+    .noise {
+      position:fixed; inset:0;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255,255,255,0.01), transparent 6%),
+                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.01), transparent 6%);
+      pointer-events:none;
+      mix-blend-mode:overlay;
+    }
+
+    /* Container */
+    .auth-wrapper{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 1fr 460px;
+      gap:36px;
+      align-items:center;
+      z-index:3;
+    }
+
+    /* Left: info / branding */
+    .brand {
+      padding:28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(6px);
+      transform: translateY(20px);
+      animation: appearUp .6s ease forwards;
+    }
+    @keyframes appearUp { from {opacity:0; transform: translateY(28px);} to {opacity:1; transform: translateY(0);} }
+
+    .logo {
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    .logo img{
+      width:96px;
+      height:96px;
+      border-radius:12px;
+      object-fit:contain;
+      background:transparent;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      transform: translateZ(0);
+    }
+    .headline{
+      margin-top:18px;
+      font-size:30px;
+      font-weight:700;
+      font-family:"Poppins";
+      color:var(--text);
+      letter-spacing:0.2px;
+    }
+    .sub{
+      margin-top:10px;color:var(--muted);font-size:15px;line-height:1.6;
+    }
+
+    /* Right: card */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow: 0 14px 40px rgba(2,6,23,0.7);
+      border: 1px solid rgba(255,255,255,0.035);
+      backdrop-filter: blur(8px);
+      transform: translateY(28px);
+      animation: appearUp .7s ease .08s forwards;
+    }
+
+    /* Form layout: use gap for vertical spacing */
+    .card form{display:flex;flex-direction:column;gap:0;}
+    .card form .field {
+      margin-bottom:18px;    /* vertical spacing between input blocks */
+    }
+
+    .card label{
+      display:block;
+      margin-bottom:8px;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    /* make all inputs identical and full-width inside card */
+    .card input[type="email"],
+    .card input[type="password"],
+    .card input[type="tel"],
+    .card input[type="text"] {
+      display:block;
+      width:100%;
+      height:50px;                 /* same height for all */
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      padding:12px 14px;
+      font-size:15px;
+      background: rgba(255,255,255,0.01);
+      color:var(--text);
+      outline:none;
+      transition: box-shadow .18s, border-color .18s, transform .12s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .card input::placeholder{color:rgba(255,255,255,0.22);}
+
+    .card input:focus{
+      border-color:var(--cyan);
+      box-shadow: 0 6px 24px rgba(0,197,207,0.08);
+      transform: translateY(-2px);
+    }
+
+    .btn{
+      height:50px;border-radius:12px;border:0;background: linear-gradient(90deg, var(--orange), #ff6a00);
+      color:#071724;font-weight:800;
+      cursor:pointer;font-size:15px; transition: transform .12s ease, box-shadow .12s ease;
+      box-shadow: 0 8px 22px rgba(255,106,0,0.12);
+    }
+    .btn:hover{ transform: translateY(-4px) scale(1.01); box-shadow: 0 18px 40px rgba(255,106,0,0.14); }
+
+    .btn.secondary{
+      background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.05); color:var(--text); font-weight:600;
+    }
+
+    .or {display:flex;align-items:center;gap:12px;margin:8px 0;color:var(--muted);font-size:14px;}
+    .or::before,.or::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.03);border-radius:1px;}
+
+    .links{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:14px;color:var(--muted);}
+    .small{font-size:13px;color:var(--muted);}
+
+    .error{color:#ff6b6b;font-size:13px;margin-top:6px;}
+    .success{color:#7DE3B6;font-size:13px;margin-top:6px;}
+
+    .provider-btn{
+      display:flex;align-items:center;gap:10px;justify-content:center;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);cursor:pointer;
+      transition: transform .12s, box-shadow .12s;
+    }
+    .provider-btn:hover{ transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+    .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:rgba(255,255,255,0.6);border-radius:50%;animation:spin .9s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* small animated accent for logo (pulse) */
+    .logo img { animation: logoPulse 6s ease-in-out infinite; transform-origin: center; }
+    @keyframes logoPulse { 0% { transform: scale(1); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.6)); } 50% { transform: scale(1.02) rotate(-0.3deg); filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7)); } 100% { transform: scale(1); } }
+
+    /* responsive */
+    @media (max-width:980px){
+      .auth-wrapper{grid-template-columns:1fr;max-width:640px;padding:16px;}
+      .brand{order:2}
+      .card{order:1}
+      .logo img{width:72px;height:72px;}
+    }
+
+    /* tiny helper */
+    a{color:var(--cyan);}
+  </style>
+</head>
+<body>
+
+  <!-- Animated background blobs -->
+  <div class="bg-blob blob1" aria-hidden="true"></div>
+  <div class="bg-blob blob2" aria-hidden="true"></div>
+  <div class="bg-blob blob3" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="auth-wrapper" role="main" aria-label="Login interface">
+    <div class="brand" aria-hidden="false">
+      <div class="logo">
+        <img src="ahjs-org.png" alt="Anto Huzrapur Jubo Shongha logo">
+        <div>
+          <div style="font-weight:700;font-size:20px">Anto Huzrapur Jubo Shongha</div>
+          <div style="font-size:13px;color:var(--muted)">Community • Trust • Action</div>
+        </div>
+      </div>
+
+      <div class="headline">Sign in to your account</div>
+      <div class="sub">সংগঠনের অ্যাকাউন্টে প্রবেশ করে সদস্যপদ ও ডোনেশন ম্যানেজ করুন।</div>
+
+      <div style="margin-top:18px;">
+        <div class="small"><strong>Tip:</strong> অনলাইনে ডোনেশন করার জন্য লগইন রাখলে সুবিধা থাকে।</div>
+      </div>
+    </div>
+
+    <div class="card" aria-live="polite">
+      <form id="authForm" autocomplete="on">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-weight:700;font-size:18px">Login</div>
+          <div class="small">No account? <a href="#" id="showRegister" style="color:var(--orange)">Create</a></div>
+        </div>
+
+        <!-- Email login -->
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" inputmode="email" placeholder="you@example.com" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" placeholder="Your password" required minlength="6" />
+        </div>
+
+        <button id="emailSignIn" type="button" class="btn">Sign in</button>
+
+        <div class="links">
+          <a href="#" id="forgot">Forgot password?</a>
+          <a href="#" id="usePhone" style="color:var(--cyan)">Use phone instead</a>
+        </div>
+
+        <div class="or" aria-hidden="true">or</div>
+
+        <!-- Google provider -->
+        <button id="googleSignIn" type="button" class="provider-btn" aria-label="Sign in with Google">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" width="18" />
+          Continue with Google
+        </button>
+
+        <div class="or">or</div>
+
+        <!-- Phone OTP -->
+        <div id="phoneSection" style="display:none;">
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input id="phone" type="tel" placeholder="+8801XXXXXXXXX" />
+          </div>
+
+          <div id="recaptcha-container" style="margin-top:8px;"></div>
+          <button id="sendOtp" type="button" class="btn secondary">Send OTP</button>
+
+          <div id="otpRow" style="display:none;margin-top:8px;">
+            <div class="field">
+              <label for="otp">Enter OTP</label>
+              <input id="otp" type="text" inputmode="numeric" placeholder="6-digit code" maxlength="6" />
+            </div>
+            <button id="verifyOtp" type="button" class="btn">Verify OTP</button>
+          </div>
+        </div>
+
+        <div id="msg" role="status" aria-live="polite" style="min-height:22px;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK v9 (modular) -->
+  <script type="module">
+    // TODO: Replace these with your Firebase project config
+    const firebaseConfig = {
+      apiKey: "REPLACE_API_KEY",
+      authDomain: "REPLACE_PROJECT.firebaseapp.com",
+      projectId: "REPLACE_PROJECT",
+      storageBucket: "REPLACE_PROJECT.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      RecaptchaVerifier,
+      signInWithPhoneNumber,
+      sendPasswordResetEmail,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // UI elements
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('password');
+    const emailBtn = document.getElementById('emailSignIn');
+    const googleBtn = document.getElementById('googleSignIn');
+    const msgEl = document.getElementById('msg');
+    const phoneSection = document.getElementById('phoneSection');
+    const usePhoneLink = document.getElementById('usePhone');
+    const sendOtpBtn = document.getElementById('sendOtp');
+    const phoneInput = document.getElementById('phone');
+    const otpRow = document.getElementById('otpRow');
+    const otpInput = document.getElementById('otp');
+    const verifyOtpBtn = document.getElementById('verifyOtp');
+    const forgotLink = document.getElementById('forgot');
+
+    let confirmationResult = null;
+
+    function showMessage(text, type='info'){
+      msgEl.textContent = text;
+      msgEl.className = type === 'error' ? 'error' : (type==='success'?'success':'');
+    }
+
+    function setLoading(el, on){
+      if(on){
+        el.disabled = true;
+        el.innerHTML = '<span class="spinner" aria-hidden="true"></span> Processing';
+      } else {
+        el.disabled = false;
+        // restore button text
+        if(el.id === 'emailSignIn') el.textContent = 'Sign in';
+        else if(el.id === 'sendOtp') el.textContent = 'Send OTP';
+        else if(el.id === 'verifyOtp') el.textContent = 'Verify OTP';
+      }
+    }
+
+    // Email/password sign-in
+    emailBtn.addEventListener('click', async () => {
+      const email = emailEl.value.trim();
+      const pass = passEl.value;
+      if(!email || !pass){
+        showMessage('সব ফিল্ড পূরণ করুন', 'error'); return;
+      }
+      setLoading(emailBtn, true); showMessage('');
+      try{
+        const userCred = await signInWithEmailAndPassword(auth, email, pass);
+        showMessage('সফলভাবে লগইন হয়েছে — Redirecting...', 'success');
+        // TODO: redirect to app dashboard
+        setTimeout(()=> { window.location.href = '/dashboard.html'; }, 600);
+      } catch(err){
+        console.error(err);
+        showMessage(err.message || 'লগইন ব্যর্থ হয়েছে', 'error');
+      } finally { setLoading(emailBtn, false); }
+    });
+
+    // Google sign-in
+    googleBtn.addEventListener('click', async () => {
+      setLoading(googleBtn, true);
+      const provider = new GoogleAuthProvider();
+      try{
+        const result = await signInWithPopup(auth, provider);
+        showMessage('Google sign-in সফল — Redirecting...', 'success');
+        setTimeout(()=> { window.location.href = '/dashboard.html'; }, 600);
+      } catch(err){
+        console.error(err);
+        showMessage(err.message || 'Google sign-in ব্যর্থ', 'error');
+      } finally { setLoading(googleBtn, false); }
+    });
+
+    // Toggle phone UI
+    usePhoneLink.addEventListener('click', (e)=>{
+      e.preventDefault();
+      phoneSection.style.display = phoneSection.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Setup invisible recaptcha for phone auth
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow sendOtp
+      }
+    }, auth);
+
+    // Send OTP
+    sendOtpBtn.addEventListener('click', async () => {
+      const phone = phoneInput.value.trim();
+      if(!phone){ showMessage('ফোন নম্বর দিন (Country code সহ)', 'error'); return; }
+      setLoading(sendOtpBtn, true); showMessage('');
+      try{
+        const appVerifier = window.recaptchaVerifier;
+        confirmationResult = await signInWithPhoneNumber(auth, phone, appVerifier);
+        otpRow.style.display = 'block';
+        showMessage('OTP পাঠানো হয়েছে — ৬ ডিজিট দিন', 'success');
+      } catch(err){
+        console.error(err);
+        showMessage(err.message || 'OTP পাঠাতে ব্যর্থ', 'error');
+      } finally { setLoading(sendOtpBtn, false); }
+    });
+
+    // Verify OTP
+    verifyOtpBtn.addEventListener('click', async () => {
+      const code = otpInput.value.trim();
+      if(!code || !confirmationResult){ showMessage('OTP দিন', 'error'); return; }
+      setLoading(verifyOtpBtn, true); showMessage('');
+      try{
+        const result = await confirmationResult.confirm(code);
+        showMessage('Phone verified — Redirecting...', 'success');
+        setTimeout(()=> { window.location.href = '/dashboard.html'; }, 600);
+      } catch(err){
+        console.error(err);
+        showMessage(err.message || 'OTP যাচাই ব্যর্থ', 'error');
+      } finally { setLoading(verifyOtpBtn, false); }
+    });
+
+    // Forgot password flow
+    forgotLink.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = emailEl.value.trim();
+      if(!email){ showMessage('অনুগ্রহ করে ইমেইল দিন recovery link পেতে', 'error'); return; }
+      try{
+        await sendPasswordResetEmail(auth, email);
+        showMessage('পাসওয়ার্ড রিসেট ইমেইল পাঠানো হয়েছে', 'success');
+      } catch(err){
+        console.error(err);
+        showMessage(err.message || 'পাসওয়ার্ড রিসেট ব্যর্থ', 'error');
+      }
+    });
+
+    // Optional: observe auth state
+    onAuthStateChanged(auth, user => {
+      if(user){
+        console.log('User signed in:', user.uid);
+      }
+    });
+  </script>
+</body>
+</html>

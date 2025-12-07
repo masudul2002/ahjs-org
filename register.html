@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Member Registration — Anto Huzrapur Jubo Shongha</title>
+  <style>
+    :root {
+      --sindoor-1: #ffffff;
+      --sindoor-2: #feffff;
+      --sky-1: #ffffff;
+      --dark-1: #4e687aa1;
+      --card-w: 980px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      font-family: Inter, "Segoe UI", Roboto, "Noto Sans Bengali", Arial, sans-serif;
+      background: linear-gradient(120deg, #04060a 0%, #07121a 50%, #04060a 100%);
+      color: #ffffff;
+      -webkit-font-smoothing:antialiased;
+      padding:36px 16px;
+    }
+
+    /* background glow */
+    body::before{
+      content:"";
+      position:fixed; inset:0; z-index:-1;
+      background:
+        radial-gradient(500px 300px at 10% 14%, rgba(201,43,34,0.08), transparent 10%),
+        radial-gradient(400px 250px at 90% 82%, rgba(16,193,255,0.05), transparent 10%);
+      animation: floaty 12s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)} }
+
+    .container{
+      width:min(96%, var(--card-w));
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    /* TOP header - large professional header with logo */
+    .top-card {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), #d748ff);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: 0 18px 60px #e81ae4;
+      border: 1px solid #68d1ff;
+      flex-direction: row;
+    }
+    .top-logo{
+      width:110px;height:110px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background: linear-gradient(135deg, var(--sindoor-1), var(--sindoor-2));
+      box-shadow: 0 14px 34px rgba(201,43,34,0.12);
+      flex-shrink:0;
+      overflow:hidden;
+    }
+    .top-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .top-meta{ display:flex; flex-direction:column; gap:6px; }
+    .top-meta h1{
+      margin:0; font-size:28px; color:#ff0000; letter-spacing:0.2px; font-weight:900;
+    }
+    .top-meta h1 .org{ color: var(--sindoor-1); }
+    .top-meta p{ margin:0; color:#1ae839; opacity:0.95; font-size:13px; }
+    .top-meta .tag{ font-size:12px; color:#c3f900; opacity:0.95; margin-top:6px; font-weight:600; }
+
+    /* main registration card */
+    .card {
+      background: linear-gradient(180deg, rgba(0, 180, 255, 0.12), rgba(190, 44, 219, 0.205));
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0px 0px 20px #68d1ff;
+      border: 1px solid #21d3f2;
+    }
+    form .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+
+    label{ display:block; color:#fff; font-weight:800; font-size:13px; margin-bottom:6px; }
+    label small{ display:block; font-weight:600; color:#ffdede; font-size:12px; margin-top:3px; }
+
+    /* base input style (used for text/date/phone/cc) */
+    .form-control{
+      width:100%;
+      padding:12px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      color: #fff;
+      outline:none;
+      transition: box-shadow .14s, transform .06s, border-color .12s;
+      font-size:14px;
+    }
+    .form-control:focus{ box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateY(-3px); border-color: rgba(255,255,255,0.12); }
+
+    .stacked-inputs > .form-control{ margin-top:8px; }
+
+    /* MOBILE number group: cc + phone aligned */
+    .phone-row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .cc-select{
+      min-width:120px;
+      max-width:140px;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      color:#fff;
+      outline:none;
+      font-size:14px;
+    }
+    /* ensure phone input grows to fill */
+    .phone-input{ flex:1; }
+
+    .file-row{ display:flex; gap:12px; align-items:center; }
+    .photo-preview{ width:86px; height:86px; border-radius:8px; background: rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; overflow:hidden; border:1px dashed rgba(255,255,255,0.06); }
+    .photo-preview img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .hint{ font-size:12px; color:#ffdede; margin-top:6px; }
+
+    .consent{ display:flex; gap:12px; align-items:flex-start; margin-top:10px; }
+    .consent input{ width:18px; height:18px; margin-top:4px; }
+    .consent label{ margin:0; font-weight:700; color:#fff; }
+
+    .actions{ display:flex; gap:12px; align-items:center; margin-top:12px; }
+    .btn{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:12px 22px;
+      border-radius:28px;
+      font-weight:900;
+      cursor:pointer;
+      border:none;
+      outline:none;
+      color:#041725;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+      transition: transform .12s ease, box-shadow .12s ease, background .22s ease;
+      overflow:hidden;
+      min-width:160px;
+    }
+    .btn.primary {
+      background: linear-gradient(90deg, #ff6300, #ff4700);
+      color: #00ff68;
+    }
+
+    .btn.primary.submitted{
+      background: linear-gradient(90deg, var(--sky-1), #68d1ff);
+      color: #021725;
+      transform: scale(.995);
+      box-shadow: 0 8px 26px rgba(0,180,255,0.12);
+    }
+    .btn.ghost {
+      background: #ff0000;
+      border: 1px solid #c800ff;
+      color: #ffffff;
+      min-width: 120px;
+    }
+
+    .ripple { position:absolute; border-radius:50%; transform:scale(0); animation:rip .6s linear; background: rgba(255,255,255,0.22); pointer-events:none; }
+    @keyframes rip { to { transform:scale(6); opacity:0; } }
+
+    .note{ color:#ffdede; font-size:13px; margin-top:8px; }
+
+    .toast{ position:fixed; right:20px; bottom:22px; background: linear-gradient(90deg, var(--sky-1), #68d1ff); color:#021725; padding:12px 18px; border-radius:10px; box-shadow: 0 10px 30px rgba(0,180,255,0.12); font-weight:800; display:none; z-index:9999; }
+
+    @media (max-width:780px){
+      .top-card{ flex-direction:row; gap:12px; align-items:center; padding:14px; }
+      .top-meta h1{ font-size:20px; }
+      .top-logo{ width:84px;height:84px; }
+      .phone-row{ flex-direction:row; }
+    }
+
+    /* ---------------------------
+       Custom dropdown (animated)
+       --------------------------- */
+
+    .custom-select{
+      position:relative;
+      width:100%;
+      max-width:100%;
+      font-family: inherit;
+      margin-top:4px;
+    }
+
+    .custom-select__trigger{
+      width:100%;
+      text-align:left;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      color:#fff;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      transition: box-shadow .18s ease, background .18s ease;
+      font-size:14px;
+    }
+
+    .custom-select__trigger .arrow{
+      width:14px; height:14px;
+      display:inline-block;
+      transform:rotate(0deg);
+      transition: transform .25s cubic-bezier(.2,.9,.2,1);
+      position:relative;
+    }
+    .custom-select__trigger .arrow::before,
+    .custom-select__trigger .arrow::after{
+      content:"";
+      position:absolute;
+      left:50%; top:50%;
+      width:10px;height:2px;
+      background:#68d1ff;
+      transform-origin:center;
+      border-radius:2px;
+    }
+    .custom-select__trigger .arrow::before{ transform: translate(-50%,-50%) rotate(45deg); }
+    .custom-select__trigger .arrow::after{ transform: translate(-50%,-50%) rotate(-45deg); }
+
+    .custom-select.open .custom-select__trigger .arrow{
+      transform: rotate(180deg);
+    }
+
+    .custom-options{
+      position:absolute;
+      left:0; right:0;
+      margin:8px 0 0 0;
+      list-style:none;
+      padding:8px;
+      border-radius:10px;
+      overflow:hidden;
+      max-height:0;
+      background: rgba(6,10,18,0.95);
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+      opacity:0;
+      transform-origin: top center;
+      transform: translateY(-6px) scaleY(.98);
+      transition: opacity .22s ease, transform .22s cubic-bezier(.2,.9,.2,1), max-height .28s ease;
+      z-index:50;
+    }
+    .custom-select.open .custom-options{
+      max-height:320px;
+      opacity:1;
+      transform: translateY(0) scaleY(1);
+    }
+
+    .custom-option{
+      padding:10px 12px;
+      color:#fff;
+      cursor:pointer;
+      font-weight:700;
+      border-radius:8px;
+      margin:4px 0;
+      transition: background .12s ease, color .12s ease, transform .12s ease;
+    }
+
+    .custom-option:hover,
+    .custom-option[aria-selected="true"]{
+      background: linear-gradient(90deg, rgba(104,209,255,0.06), rgba(255,88,0,0.04));
+      color:#68d1ff;
+      transform: translateX(4px);
+    }
+
+    .custom-options{ overflow:auto; scrollbar-width:thin; }
+    .custom-options::-webkit-scrollbar{ height:8px; width:8px; }
+    .custom-options::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.06); border-radius:8px; }
+
+    @media (max-width:480px){
+      .custom-select__trigger{ padding:10px; font-size:13px; }
+      .custom-option{ padding:10px 10px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- TOP header with logo and text -->
+    <div class="top-card" role="banner" aria-label="Anto Huzrapur Jubo Shongha header">
+      <div class="top-logo" aria-hidden="true">
+        <!-- place your image file 'ahjs-org.png' in same folder as this html -->
+        <img src="ahjs-org.png" alt="AHJS logo">
+      </div>
+
+      <div class="top-meta">
+        <h1><span class="org">Anto Huzrapur Jubo Shongha</span></h1>
+        <p>Community • Trust • Action</p>
+        <div class="tag">Member Registration — সদস্য নিবন্ধন</div>
+      </div>
+    </div>
+
+    <!-- registration card -->
+    <div class="card" role="main" aria-labelledby="regTitle">
+      <h2 id="regTitle" style="margin:0 0 12px 0; color:#fff; font-size:18px; font-weight:900;">Member Registration</h2>
+      <p class="note">Please fill out the form. / অনুগ্রহ করে ফরম পূরণ করুন।</p>
+
+      <form id="regForm" autocomplete="off">
+        <div class="grid">
+          <div>
+            <label> Name (English) <small>নাম (বাংলা)</small></label>
+            <input id="name_en" class="form-control" type="text" placeholder="Full name (English)" required />
+            <div class="stacked-inputs">
+              <input id="name_bn" class="form-control" type="text" placeholder="পূর্ণ নাম (বাংলা)" />
+            </div>
+          </div>
+
+          <div>
+            <label> Father's name <small>পিতার নাম</small></label>
+            <input id="father" class="form-control" type="text" placeholder="Father's name / পিতার নাম" />
+          </div>
+
+          <div>
+            <label> Mother's name <small>মাতার নাম</small></label>
+            <input id="mother" class="form-control" type="text" placeholder="Mother's name / মাতার নাম" />
+          </div>
+
+          <div>
+            <label> Mobile <small>মোবাইল নম্বর</small></label>
+            <div class="phone-row">
+              <select id="cc" class="cc-select" aria-label="country code">
+                    <option value="+880">🇧🇩 +880 (Bangladesh)</option>
+              </select>
+              <input id="phone" class="form-control phone-input" type="tel" inputmode="numeric" pattern="[0-9]*" placeholder="1711234567" maxlength="11" />
+            </div>
+            <div class="note" style="margin-top:6px">Include operator code without leading zero. Ex: 1711234567. / অপারেটর কোডসহ (শূন্য ছাড়াই)।</div>
+          </div>
+
+          <div>
+            <label> Date of Birth <small>জন্মতারিখ</small></label>
+            <input id="dob" class="form-control" type="date" />
+            <div class="note" style="margin-top:8px">Age will be calculated automatically. / বয়স স্বয়ংক্রিয়ভাবে গণনা হবে।</div>
+          </div>
+
+          <!-- ---------- CUSTOM BLOOD GROUP DROPDOWN ---------- -->
+          <div>
+            <label> Blood Group <small>রক্তের গ্রুপ</small></label>
+
+            <!-- custom-select block -->
+            <div class="custom-select" data-name="blood_group" id="customBlood">
+              <button type="button" class="custom-select__trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="selected">-- Select Blood Group --</span>
+                <span class="arrow" aria-hidden="true"></span>
+              </button>
+
+              <ul class="custom-options" role="listbox" tabindex="-1" aria-labelledby="customBlood">
+                <li class="custom-option" role="option" data-value="A+">A+</li>
+                <li class="custom-option" role="option" data-value="A-">A-</li>
+                <li class="custom-option" role="option" data-value="B+">B+</li>
+                <li class="custom-option" role="option" data-value="B-">B-</li>
+                <li class="custom-option" role="option" data-value="O+">O+</li>
+                <li class="custom-option" role="option" data-value="O-">O-</li>
+                <li class="custom-option" role="option" data-value="AB+">AB+</li>
+                <li class="custom-option" role="option" data-value="AB-">AB-</li>
+              </ul>
+
+              <!-- hidden input that will hold the selected value for form submit -->
+              <input type="hidden" name="blood_group" id="blood_group" value="">
+            </div>
+
+            <div class="note">Select donor-friendly group if known. / জানা থাকলে রক্তের গ্রুপ সিলেক্ট করুন।</div>
+          </div>
+          <!-- ---------- END BLOOD GROUP ---------- -->
+
+          <!-- NID / Birth certificate No -->
+          <div>
+            <label> NID / Birth certificate No. <small>এনআইডি অথবা জন্মনিবন্ধন নম্বর</small></label>
+            <input id="nid_no" class="form-control" type="text" placeholder="NID or Birth certificate number" />
+            <div class="note">Provide NID or Birth Certificate number if available. / NID বা জন্মনিবন্ধন নম্বর থাকলে দিন।</div>
+          </div>
+
+          <!-- Photo upload -->
+          <div>
+            <label> Picture Upload <small>ছবি আপলোড (jpg/jpeg/png, upto 2MB)</small></label>
+            <div class="file-row">
+              <input id="photo" type="file" accept="image/jpeg,image/jpg,image/png" />
+              <div class="photo-preview" id="photoPreview" title="Preview">
+                <span style="color:#ffdede;font-size:12px;">No photo</span>
+              </div>
+            </div>
+            <div class="note">Allowed: .jpg .jpeg .png — Maximum <strong>2 MB</strong>. / অনুমোদিত: jpg/png — সর্বোচ্চ 2MB।</div>
+          </div>
+
+          <div>
+            <label> Address (Village / Upazila / District) <small>ঠিকানা (গ্রাম / উপজেলা / জেলা)</small></label>
+            <input id="village" class="form-control" type="text" placeholder="Village / গ্রাম" style="margin-top:6px"/>
+            <input id="upazila" class="form-control" type="text" placeholder="Upazila / উপজেলা" style="margin-top:8px"/>
+            <input id="district" class="form-control" type="text" placeholder="District / জেলা" style="margin-top:8px"/>
+          </div>
+
+          <div>
+            <div class="consent">
+              <input id="consent" type="checkbox" />
+              <div>
+                <label for="consent">I agree to follow the organization rules and allow AHJS to use my data.</label>
+                <small>আমি সংগঠনের নিয়মাবলী মেনে চলব এবং আমার তথ্য AHJS ব্যবহারের জন্য অনুমোদন দিচ্ছি।</small>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="submitBtn" type="submit"> Submit / সাবমিট </button>
+          <button class="btn ghost" id="resetBtn" type="button"> Reset / রিসেট </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <script>
+    // storage & helpers
+    const STORAGE_KEY = 'ahjs_members_with_photo';
+    const MAX_PHOTO_BYTES = 2 * 1024 * 1024; // 2 MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
+    function showToast(msg){
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      t.style.opacity = '1';
+      clearTimeout(t._hide);
+      t._hide = setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>t.style.display='none',300); }, 2200);
+    }
+
+    function calcAge(dobStr){
+      if(!dobStr) return '';
+      const dob = new Date(dobStr);
+      const now = new Date();
+      let age = now.getFullYear() - dob.getFullYear();
+      const m = now.getMonth() - dob.getMonth();
+      if(m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+      return age >= 0 ? age : '';
+    }
+
+    function uid(){ return 'm_' + Math.random().toString(36).slice(2,9); }
+    function loadMembers(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }catch(e){ return []; } }
+    function saveMembers(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+
+    // photo preview & validation
+    const photoInput = document.getElementById('photo');
+    const photoPreview = document.getElementById('photoPreview');
+    let currentPhotoData = null; // base64 string
+
+    photoInput.addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if(!file){
+        photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+        currentPhotoData = null;
+        return;
+      }
+
+      // validate type
+      if(!ALLOWED_TYPES.includes(file.type)){
+        alert('Invalid file type. Only jpg/jpeg/png allowed. / শুধুমাত্র jpg/jpeg/png ফাইল গ্রহণ করা হয়।');
+        photoInput.value = '';
+        photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+        currentPhotoData = null;
+        return;
+      }
+
+      // validate size
+      if(file.size > MAX_PHOTO_BYTES){
+        const mb = (MAX_PHOTO_BYTES / (1024*1024)).toFixed(1);
+        alert('File too large. Maximum ' + mb + ' MB allowed. / ফাইল বড়। সর্বোচ্চ ' + mb + ' MB অনুমোদিত।');
+        photoInput.value = '';
+        photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+        currentPhotoData = null;
+        return;
+      }
+
+      // read as base64 and preview
+      try{
+        const b64 = await fileToBase64(file);
+        currentPhotoData = b64;
+        photoPreview.innerHTML = '<img alt="preview" src="' + b64 + '">';
+      }catch(err){
+        console.error(err);
+        alert('Could not read the image. Try another file. / ছবি পড়া গেল না। অন্য ফাইল দিন।');
+        photoInput.value = '';
+        photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+        currentPhotoData = null;
+      }
+    });
+
+    function fileToBase64(file){
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // FORM handling
+    const form = document.getElementById('regForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // validate consent
+      const consent = document.getElementById('consent').checked;
+      if(!consent){
+        alert('Please accept the consent / দয়া করে সম্মতি দাবিটি গ্রহণ করুন।');
+        return;
+      }
+
+      // gather fields
+      const name_en = document.getElementById('name_en').value.trim();
+      const name_bn = document.getElementById('name_bn').value.trim();
+      const father = document.getElementById('father').value.trim();
+      const mother = document.getElementById('mother').value.trim();
+      const cc = document.getElementById('cc').value;
+      const phone = document.getElementById('phone').value.trim();
+      const dob = document.getElementById('dob').value;
+      const blood_group = document.getElementById('blood_group').value; // hidden input (set by custom dropdown)
+      const nid_no = document.getElementById('nid_no').value.trim();
+      const village = document.getElementById('village').value.trim();
+      const upazila = document.getElementById('upazila').value.trim();
+      const district = document.getElementById('district').value.trim();
+
+      if(!name_en && !name_bn){
+        alert('Please provide at least a name (English or Bangla). / নাম দিন (ইংরেজি or বাংলা)।');
+        return;
+      }
+
+      if(!blood_group){
+        alert('Please select blood group. / রক্তের গ্রুপ সিলেক্ট করুন।');
+        return;
+      }
+
+      // basic phone validation: ensure digits and reasonable length
+      const phoneDigits = phone.replace(/\D/g,'');
+      if(phoneDigits.length < 7 || phoneDigits.length > 13){
+        if(phone.length > 0){ // only warn if user entered something
+          alert('Please enter a valid phone number (7-13 digits). / সঠিক ফোন নম্বর দিন (৭-১৩ সংখ্যার মধ্যে)।');
+          return;
+        }
+      }
+
+      // build member object (include photo base64 if present)
+      const age = calcAge(dob);
+      const member = {
+        id: uid(),
+        name_en, name_bn, father, mother,
+        phone: (cc + ' ' + phone).trim(),
+        dob, age, blood_group, nid_no,
+        village, upazila, district,
+        photo: currentPhotoData, // null or dataURL
+        photo_name: (photoInput.files && photoInput.files[0]) ? photoInput.files[0].name : '',
+        created_at: new Date().toISOString()
+      };
+
+      // visual feedback: change button
+      submitBtn.classList.add('submitted');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saved ✓';
+
+      // save to localStorage
+      const list = loadMembers();
+      list.unshift(member);
+      saveMembers(list);
+
+      showToast('Member saved — সদস্য সংরক্ষিত হয়েছে');
+
+      setTimeout(()=>{
+        submitBtn.classList.remove('submitted');
+        submitBtn.disabled = false;
+        submitBtn.textContent = ' Submit / সাবমিট ';
+      }, 1400);
+
+      // reset form but keep preview cleared
+      form.reset();
+      photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+      currentPhotoData = null;
+
+      // clear custom dropdown UI if any selected
+      const cs = document.querySelectorAll('.custom-select');
+      cs.forEach(c=>{
+        const sel = c.querySelector('.selected');
+        sel && (sel.textContent = '-- Select Blood Group --');
+        const hid = c.querySelector('input[type="hidden"]');
+        if(hid) hid.value = '';
+        const chosen = c.querySelectorAll('.custom-option[aria-selected="true"]');
+        chosen.forEach(x => x.removeAttribute('aria-selected'));
+      });
+    });
+
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Reset the form? / ফর্ম রিসেট করবেন?')){
+        form.reset();
+        photoPreview.innerHTML = '<span style="color:#ffdede;font-size:12px;">No photo</span>';
+        currentPhotoData = null;
+
+        // reset custom selects
+        const cs = document.querySelectorAll('.custom-select');
+        cs.forEach(c=>{
+          const sel = c.querySelector('.selected');
+          sel && (sel.textContent = '-- Select Blood Group --');
+          const hid = c.querySelector('input[type="hidden"]');
+          if(hid) hid.value = '';
+          const chosen = c.querySelectorAll('.custom-option[aria-selected="true"]');
+          chosen.forEach(x => x.removeAttribute('aria-selected'));
+        });
+      }
+    });
+
+    // ripple on buttons
+    document.querySelectorAll('.btn').forEach(b=>{
+      b.addEventListener('pointerdown', function(ev){
+        const rect = b.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const size = Math.max(rect.width, rect.height) * 1.2;
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (ev.clientX - rect.left - size/2) + 'px';
+        ripple.style.top = (ev.clientY - rect.top - size/2) + 'px';
+        b.appendChild(ripple);
+        setTimeout(()=> ripple.remove(), 650);
+      });
+    });
+
+    // --------------------------
+    // CUSTOM SELECT JS (keyboard + animation)
+    // --------------------------
+    (function(){
+      const cs = document.querySelectorAll('.custom-select');
+      cs.forEach(select => {
+        const trigger = select.querySelector('.custom-select__trigger');
+        const options = select.querySelectorAll('.custom-option');
+        const list = select.querySelector('.custom-options');
+        const hidden = select.querySelector('input[type="hidden"]');
+        const selectedSpan = trigger.querySelector('.selected');
+
+        // toggle open/close
+        function toggle(open){
+          if(open === undefined) open = !select.classList.contains('open');
+          if(open){
+            select.classList.add('open');
+            trigger.setAttribute('aria-expanded','true');
+            try{ list.focus(); }catch(e){}
+            const sel = list.querySelector('[aria-selected="true"]');
+            if(sel) sel.scrollIntoView({block:'nearest'});
+          } else {
+            select.classList.remove('open');
+            trigger.setAttribute('aria-expanded','false');
+          }
+        }
+
+        // click trigger
+        trigger.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          toggle();
+        });
+
+        // option click
+        options.forEach(opt=>{
+          opt.addEventListener('click', (ev)=>{
+            const v = opt.dataset.value;
+            const text = opt.textContent.trim();
+            // set selected visuals
+            options.forEach(o=> o.removeAttribute('aria-selected'));
+            opt.setAttribute('aria-selected','true');
+            selectedSpan.textContent = text;
+            if(hidden) hidden.value = v;
+            toggle(false);
+          });
+        });
+
+        // keyboard navigation
+        let idx = -1;
+        trigger.addEventListener('keydown', (e)=>{
+          if(e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            toggle(true);
+            idx = 0;
+            options[0] && options[0].focus();
+          }
+        });
+
+        list.addEventListener('keydown', (e)=>{
+          const focusable = Array.from(options);
+          if(e.key === 'ArrowDown'){
+            e.preventDefault();
+            idx = Math.min(focusable.length-1, (idx===-1?0:idx+1));
+            focusable[idx].focus();
+          } else if(e.key === 'ArrowUp'){
+            e.preventDefault();
+            idx = Math.max(0, (idx===-1?0:idx-1));
+            focusable[idx].focus();
+          } else if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            focusable[idx] && focusable[idx].click();
+          } else if(e.key === 'Escape'){
+            toggle(false);
+            trigger.focus();
+          }
+        });
+
+        // make each option focusable for keyboard
+        options.forEach(o=>{
+          o.tabIndex = 0;
+          o.addEventListener('focus', () => {
+            idx = Array.from(options).indexOf(o);
+          });
+        });
+
+        // close on outside click
+        document.addEventListener('click', (ev)=>{
+          if(!select.contains(ev.target)) toggle(false);
+        });
+
+        // close on window blur
+        window.addEventListener('blur', ()=> toggle(false));
+      });
+    })();
+  </script>
+</body>
+</html>
